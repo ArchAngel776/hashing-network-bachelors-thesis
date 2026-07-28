@@ -1,2 +1,2 @@
-# hashing-network-bachelor-thesis
-This project contains source software for the bachelor thesis purpose.
+# Hashing network - Bachelor's thesis
+This project contains source software for the Bachelor's thesis purpose.
