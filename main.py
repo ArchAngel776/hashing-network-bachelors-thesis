@@ -15,6 +15,9 @@ batch_size = 64
 learning_rate = 1e-3
 epochs = 40
 
+hash_length=128
+alpha=1000
+
 
 transform_training = Compose([
     ToImage(),
@@ -70,7 +73,7 @@ train_dataloader = DataLoader(dataset_train, batch_size=batch_size, shuffle=True
 test_dataloader = DataLoader(dataset_test, batch_size=batch_size, shuffle=False)
 
 
-hsdh = HSDH(hash_length=128, alpha=1000)
+hsdh = HSDH(hash_length=hash_length, alpha=alpha)
 loss_function = HSDHLoss(beta=.2)
 
 
