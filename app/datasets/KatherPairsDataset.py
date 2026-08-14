@@ -71,7 +71,7 @@ class KatherPairsDataset(Dataset):
 
         return image_i, image_j, positive_pair
 
-    def resample(self, epoch):
+    def resample(self, epoch = 0):
         self._data = []
 
         rng = Random(KatherPairsDataset.RANDOM_SEED + epoch)
