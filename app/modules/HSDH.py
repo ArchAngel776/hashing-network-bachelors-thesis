@@ -1,4 +1,3 @@
-from torch import sum
 from torch.nn import Module, Sigmoid, Sequential, Linear
 from app.modules.HashGenerator import HashGenerator
 
@@ -17,5 +16,5 @@ class HSDH(Module):
         hash_i = self._hash_generator(image_i)
         hash_j = self._hash_generator(image_j)
 
-        similarity = sum(hash_i * hash_j).sum(dim=1, keepdim=True)
+        similarity = (hash_i * hash_j).sum(dim=1, keepdim=True)
         return self._fully_connected_layer(similarity)
