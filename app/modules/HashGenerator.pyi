@@ -1,6 +1,6 @@
 from typing import Self, ClassVar
 from torch import Tensor, no_grad
-from torch.nn import Module, BatchNorm1d, Linear, SELU
+from torch.nn import Module, BatchNorm1d, Linear
 from torchvision.models.mobilenetv3 import MobileNetV3
 from app.modules.SignumApprox import SignumApprox
 
@@ -11,7 +11,6 @@ class HashGenerator(Module):
     _mobile_net: MobileNetV3
 
     _batch_normalization: BatchNorm1d
-    _activation: SELU
 
     _hash_projection: Linear
     _hash_activation: SignumApprox
