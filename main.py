@@ -3,7 +3,8 @@ import torch
 from torch.utils.data import DataLoader
 from torch.optim.adam import Adam
 from torch.accelerator import current_accelerator
-from torchvision.transforms.v2 import Compose, ToImage, Resize, ToDtype, Normalize, Lambda
+from torchvision.transforms.v2 import (Compose, ToImage, Resize, RandomHorizontalFlip, RandomVerticalFlip, ToDtype,
+                                       Normalize, Lambda)
 from app.datasets.KatherDataset import KatherDataset
 from app.datasets.KatherPairsDataset import KatherPairsDataset
 from app.modules.HSDH import HSDH
@@ -15,6 +16,31 @@ learning_rate = 1e-3
 epochs = 40
 
 
+transform_training = Compose([
+    ToImage(),
+    Resize((224, 224)),
+    RandomHorizontalFlip(p=0.5),
+    RandomVerticalFlip(p=0.5),
+    ToDtype(dtype=torch.float32, scale=True),
+    Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
+])
+
+transform_test = Compose([
+    ToImage(),
+    Resize((224, 224)),
+    ToDtype(dtype=torch.float32, scale=True),
+    Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
+])
+
+target_transform = Lambda(lambda label: torch.tensor(label, dtype=torch.float32))
+
+
 dataset = KatherDataset(
     source_dir = "data/Kather_texture_2016_image_tiles_5000"
 )
@@ -23,52 +49,16 @@ dataset = KatherDataset(
 dataset_train = KatherPairsDataset(
     dataset,
     train=True,
-    transform=Compose([
-        ToImage(),
-        Resize(
-            size=(224, 224),
-            antialias=True
-        ),
-        ToDtype(
-            dtype=torch.float32,
-            scale=True
-        ),
-        Normalize(
-            #mean=[0.5, 0.5, 0.5],
-            #std=[0.5, 0.5, 0.5]
-            mean=[0.485, 0.456, 0.406],
-            std=[0.229, 0.224, 0.225]
-        )
-    ]),
-    target_transform=Lambda(
-        lambda label: torch.tensor(label, dtype=torch.float32)
-    )
+    transform=transform_training,
+    target_transform=target_transform
 )
 
 
 dataset_test = KatherPairsDataset(
     dataset,
     train=False,
-    transform=Compose([
-        ToImage(),
-        Resize(
-            size=(224, 224),
-            antialias=True
-        ),
-        ToDtype(
-            dtype=torch.float32,
-            scale=True
-        ),
-        Normalize(
-            #mean=[0.5, 0.5, 0.5],
-            #std=[0.5, 0.5, 0.5]
-            mean=[0.485, 0.456, 0.406],
-            std=[0.229, 0.224, 0.225]
-        )
-    ]),
-    target_transform=Lambda(
-        lambda label: torch.tensor(label, dtype=torch.float32)
-    )
+    transform=transform_test,
+    target_transform=target_transform
 )
 
 
