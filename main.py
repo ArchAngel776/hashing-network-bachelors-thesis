@@ -120,7 +120,7 @@ def train_loop():
 
         optimizer.zero_grad(set_to_none=True)
 
-        prediction = hsdh(image_i, image_j, target)
+        prediction = hsdh(image_i, image_j)
         loss = loss_function(prediction, target)
 
         loss.backward()
@@ -151,7 +151,7 @@ def test_loop():
     for image_i, image_j, target in test_dataloader:
         image_i, image_j, target = image_i.to(device), image_j.to(device), target.to(device).unsqueeze(dim=1)
 
-        prediction = hsdh(image_i, image_j, target)
+        prediction = hsdh(image_i, image_j)
         loss = loss_function(prediction, target)
 
         loss_result += loss.item()

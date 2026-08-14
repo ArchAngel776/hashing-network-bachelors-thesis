@@ -1,4 +1,4 @@
-from torch import sum, where
+from torch import sum
 from torch.nn import Module, Sigmoid, Sequential, Linear
 from app.modules.HashGenerator import HashGenerator
 
@@ -13,11 +13,11 @@ class HSDH(Module):
             Sigmoid()
         )
 
-    def forward(self, image_i, image_j, target):
+    def forward(self, image_i, image_j):
         hash_i = self._hash_generator(image_i)
         hash_j = self._hash_generator(image_j)
 
         similarity = sum(hash_i * hash_j, dim=1, keepdim=True)
         prediction = self._fully_connected_layer(similarity)
         #return prediction, similarity, hash_i, hash_j
-        return where(target == 1., prediction, 1. - prediction)
+        return prediction
