@@ -72,8 +72,8 @@ dataset_test = KatherPairsDataset(
 )
 
 
-dataset_train.resample(0)
-dataset_test.resample(0)
+dataset_train.resample()
+dataset_test.resample()
 
 
 train_dataloader = DataLoader(dataset_train, batch_size=batch_size, shuffle=True)
