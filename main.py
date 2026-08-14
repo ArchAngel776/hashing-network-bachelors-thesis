@@ -96,11 +96,16 @@ optimizer = Adam(
 )
 
 
-if path.exists("data/Kather_texture_2016_image_tiles_5000/model.pth"):
-    params = torch.load("data/Kather_texture_2016_image_tiles_5000/model.pth", map_location=device)
+model_load_path = input("Give a path for loading model (leave blank, if you do not want to load it): ")
 
-    hsdh.load_state_dict(params["model"])
-    optimizer.load_state_dict(params["optimizer"])
+if len(model_load_path) > 0:
+    if path.exists(model_load_path):
+        params = torch.load(model_load_path, map_location=device)
+
+        hsdh.load_state_dict(params["model"])
+        optimizer.load_state_dict(params["optimizer"])
+    else:
+        print(f"Model not found under the path: {model_load_path}. Weights will not be loaded.")
 
 
 def train_loop():
@@ -186,9 +191,12 @@ if __name__ == "__main__":
         print(f"Test accuracy: {accuracy_test}")
         print("")
 
-    torch.save(
-        {"model": hsdh.state_dict(), "optimizer": optimizer.state_dict()},
-        "data/Kather_texture_2016_image_tiles_5000/model.pth"
-    )
+    model_save_path = input("Give a path for saving model (leave blank, if you do not want to save it): ")
+
+    if len(model_save_path) > 0:
+        torch.save(
+            {"model": hsdh.state_dict(), "optimizer": optimizer.state_dict()},
+            "data/Kather_texture_2016_image_tiles_5000/model.pth"
+        )
 
     print("Done!")
