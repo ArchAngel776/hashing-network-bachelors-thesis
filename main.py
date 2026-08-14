@@ -90,16 +90,17 @@ device = accelerator if accelerator is not None else torch.device("cpu")
 hsdh.to(device)
 
 
-if path.exists("data/Kather_texture_2016_image_tiles_5000/model.pth"):
-    hsdh.load_state_dict(
-        torch.load("data/Kather_texture_2016_image_tiles_5000/model.pth", map_location=device, weights_only=True)
-    )
-
-
 optimizer = Adam(
     hsdh.parameters(),
     lr=learning_rate
 )
+
+
+if path.exists("data/Kather_texture_2016_image_tiles_5000/model.pth"):
+    params = torch.load("data/Kather_texture_2016_image_tiles_5000/model.pth", map_location=device)
+
+    hsdh.load_state_dict(params["model"])
+    optimizer.load_state_dict(params["optimizer"])
 
 
 def train_loop():
@@ -185,5 +186,9 @@ if __name__ == "__main__":
         print(f"Test accuracy: {accuracy_test}")
         print("")
 
-    torch.save(hsdh.state_dict(), "data/Kather_texture_2016_image_tiles_5000/model.pth")
+    torch.save(
+        {"model": hsdh.state_dict(), "optimizer": optimizer.state_dict()},
+        "data/Kather_texture_2016_image_tiles_5000/model.pth"
+    )
+
     print("Done!")
