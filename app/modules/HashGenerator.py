@@ -1,6 +1,6 @@
 from torch import no_grad, where, ones_like
 from torch.nn import Module, Linear, BatchNorm1d, SELU, init
-from torchvision.models import mobilenet_v2, MobileNet_V2_Weights
+from torchvision.models import mobilenet_v3_large, MobileNet_V3_Large_Weights
 from app.modules.SignumApprox import SignumApprox
 
 
@@ -10,9 +10,8 @@ class HashGenerator(Module):
     def __init__(self, hash_length, alpha):
         super().__init__()
 
-        self._mobile_net = mobilenet_v2(
-            weights=MobileNet_V2_Weights.IMAGENET1K_V2,
-            num_classes=HashGenerator.FEATURES_VECTOR_SIZE
+        self._mobile_net = mobilenet_v3_large(
+            weights=MobileNet_V3_Large_Weights.IMAGENET1K_V2
         )
 
         self._batch_normalization = BatchNorm1d(num_features=HashGenerator.FEATURES_VECTOR_SIZE)
