@@ -1,5 +1,5 @@
 from torch import Tensor, no_grad
-from torch.nn import Module, Sigmoid, Sequential
+from torch.nn import Module, Sequential
 from typing import Self
 from app.modules.HashGenerator import HashGenerator
 
