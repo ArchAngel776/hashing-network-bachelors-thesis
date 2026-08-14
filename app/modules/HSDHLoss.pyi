@@ -1,6 +1,6 @@
+from typing import Self, ClassVar
 from torch import Tensor
 from torch.nn import Module
-from typing import Self, ClassVar
 
 
 class HSDHLoss(Module):
