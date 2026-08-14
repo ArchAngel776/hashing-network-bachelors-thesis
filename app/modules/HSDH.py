@@ -8,11 +8,8 @@ class HSDH(Module):
         super().__init__()
 
         self._hash_generator = HashGenerator(hash_length, alpha)
-        self._prediction = Sequential(
-            Linear(
-                in_features=1,
-                out_features=1
-            ),
+        self._fully_connected_layer = Sequential(
+            Linear(in_features=1, out_features=1),
             Sigmoid()
         )
 
@@ -21,6 +18,6 @@ class HSDH(Module):
         hash_j = self._hash_generator(image_j)
 
         similarity = sum(hash_i * hash_j, dim=1, keepdim=True)
-        prediction = self._prediction(similarity)
+        prediction = self._fully_connected_layer(similarity)
         #return prediction, similarity, hash_i, hash_j
         return where(target == 1., prediction, 1. - prediction)

@@ -6,8 +6,7 @@ from app.modules.HashGenerator import HashGenerator
 
 class HSDH(Module):
     _hash_generator: HashGenerator
-
-    _prediction: Sequential
+    _fully_connected_layer: Sequential
 
     def __init__(self: Self, hash_length: int, alpha: float) -> None: ...
 
