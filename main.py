@@ -175,13 +175,7 @@ def test_loop():
     return average_loss, accuracy
 
 
-if __name__ == "__main__":
-    print("Start learning process...")
-    print("")
-
-    print(f"Used device: {device.type}")
-    print("")
-
+def main_loop():
     for epoch in range(epochs):
         print(f"Epoch {epoch + 1}/{epochs}")
         print("------------------------------------")
@@ -201,12 +195,24 @@ if __name__ == "__main__":
         print(f"Test accuracy: {accuracy_test}")
         print("")
 
+
+if __name__ == "__main__":
+    print("Start learning process...")
+    print("")
+
+    print(f"Used device: {device.type}")
+    print("")
+
+    try:
+        main_loop()
+    except KeyboardInterrupt:
+        print("Training loop interrupted by user.")
+
     model_save_path = input("Give a path for saving model (leave blank, if you do not want to save it): ")
 
     if len(model_save_path) > 0:
-        torch.save(
-            {"model": hsdh.state_dict(), "optimizer": optimizer.state_dict()},
-            "data/Kather_texture_2016_image_tiles_5000/model.pth"
-        )
+        torch.save({"model": hsdh.state_dict(), "optimizer": optimizer.state_dict()}, model_save_path)
+
+        print("Model saved successfully!")
 
     print("Done!")
