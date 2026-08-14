@@ -5,13 +5,18 @@ from app.modules.SignumApprox import SignumApprox
 
 
 class HashGenerator(Module):
-    FEATURES_VECTOR_SIZE = 1000
+    FEATURES_VECTOR_SIZE = 512
 
     def __init__(self, hash_length, alpha):
         super().__init__()
 
         self._mobile_net = mobilenet_v3_large(
             weights=MobileNet_V3_Large_Weights.IMAGENET1K_V2
+        )
+
+        self._mobile_net.classifier[3] = Linear(
+            in_features=self._mobile_net.classifier[3].in_features,
+            out_features=HashGenerator.FEATURES_VECTOR_SIZE,
         )
 
         self._batch_normalization = BatchNorm1d(num_features=HashGenerator.FEATURES_VECTOR_SIZE)
