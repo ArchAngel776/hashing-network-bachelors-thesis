@@ -1,6 +1,6 @@
+from typing import Self
 from torch import Tensor
 from torch.nn import Module, Sequential
-from typing import Self
 from app.modules.HashGenerator import HashGenerator
 
 
