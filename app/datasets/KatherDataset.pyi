@@ -13,7 +13,6 @@ class KatherDataset(Dataset[tuple[str, int]]):
     def __init__(
         self: Self,
         source_dir: str,
-        label: Optional[int] = None,
         transform: Optional[Transform] = None,
         target_transform: Optional[Transform] = None
     ) -> None: ...
