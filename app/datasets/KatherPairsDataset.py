@@ -76,9 +76,14 @@ class KatherPairsDataset(Dataset):
 
         rng = Random(KatherPairsDataset.RANDOM_SEED + epoch)
 
-        for image_path, label in self._sources:
+        for index, (image_path, label) in enumerate(self._sources):
             positives = self._groups[label]
-            negatives = self._groups[rng.choice(self.negative_labels(label))]
+
+            negative_labels = self.negative_labels(label)
+            negative_label_index = (index + epoch) % len(negative_labels)
+
+            negative_label = negative_labels[negative_label_index]
+            negatives = self._groups[negative_label]
 
             image_positive_path = rng.choice(positives)
             image_negative_path = rng.choice(negatives)
