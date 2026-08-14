@@ -96,3 +96,7 @@ class KatherPairsDataset(Dataset):
 
     def negative_labels(self, label):
         return [ negative_label for negative_label in self._labels if negative_label != label ]
+
+    @property
+    def sources(self):
+        return self._sources

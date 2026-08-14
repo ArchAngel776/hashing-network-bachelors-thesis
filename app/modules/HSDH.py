@@ -1,3 +1,4 @@
+from torch import no_grad
 from torch.nn import Module, Sigmoid, Sequential, Linear
 from app.modules.HashGenerator import HashGenerator
 
@@ -18,3 +19,7 @@ class HSDH(Module):
 
         similarity = (hash_i * hash_j).sum(dim=1, keepdim=True)
         return self._fully_connected_layer(similarity)
+
+    @no_grad()
+    def generate(self, image):
+        return self._hash_generator.generate(image)
