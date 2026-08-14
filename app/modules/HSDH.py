@@ -1,4 +1,4 @@
-from torch import sum, where, no_grad
+from torch import sum, where
 from torch.nn import Module, Sigmoid, Sequential, Linear
 from app.modules.HashGenerator import HashGenerator
 
@@ -24,10 +24,3 @@ class HSDH(Module):
         prediction = self._prediction(similarity)
         #return prediction, similarity, hash_i, hash_j
         return where(target == 1., prediction, 1. - prediction)
-
-    @no_grad()
-    def compare(self, image_i, image_j):
-        hash_i = self._hash_generator.generate(image_i)
-        hash_j = self._hash_generator.generate(image_j)
-
-        return sum(hash_i != hash_j, dim=1)
