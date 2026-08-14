@@ -12,8 +12,7 @@ from app.modules.HSDHLoss import HSDHLoss
 
 
 batch_size = 64
-learning_rate = 1e-3
-epochs = 40
+epochs = 100
 
 hash_length=128
 alpha=1000
@@ -83,10 +82,28 @@ device = accelerator if accelerator is not None else torch.device("cpu")
 hsdh.to(device)
 
 
-optimizer = Adam(
-    hsdh.parameters(),
-    lr=learning_rate
-)
+optimizer = Adam([
+    {
+        "name": "convolution",
+        "params": hsdh._hash_generator._mobile_net.parameters(),
+        "lr": 1e-4
+    },
+    {
+        "name": "batch_normalization",
+        "params": hsdh._hash_generator._batch_normalization.parameters(),
+        "lr": 1e-3
+    },
+    {
+        "name": "hash_projection",
+        "params": hsdh._hash_generator._hash_projection.parameters(),
+        "lr": 1e-6
+    },
+    {
+        "name": "fully_connected_layer_3",
+        "params": hsdh._fully_connected_layer.parameters(),
+        "lr": 1e-3
+    }
+])
 
 
 model_load_path = input("Give a path for loading model (leave blank, if you do not want to load it): ")
