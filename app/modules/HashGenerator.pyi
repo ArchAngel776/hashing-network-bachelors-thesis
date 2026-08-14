@@ -1,7 +1,7 @@
+from typing import Self, ClassVar
 from torch import Tensor, no_grad
 from torch.nn import Module, BatchNorm1d, Linear, SELU
 from torchvision.models.mobilenetv2 import MobileNetV2
-from typing import Self, ClassVar
 from app.modules.SignumApprox import SignumApprox
 
 
