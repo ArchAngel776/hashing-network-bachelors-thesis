@@ -3,8 +3,7 @@ import torch
 from torch.utils.data import DataLoader
 from torch.optim.adam import Adam
 from torch.accelerator import current_accelerator
-from torchvision.transforms.v2 import (Compose, ToImage, Resize, RandomHorizontalFlip, RandomVerticalFlip, ToDtype,
-                                       Normalize, Lambda)
+from torchvision.transforms.v2 import Compose, ToImage, Resize, ToDtype,Normalize, Lambda
 from app.datasets.KatherDataset import KatherDataset
 from app.datasets.KatherPairsDataset import KatherPairsDataset
 from app.datasets.KatherRetrievalDataset import KatherRetrievalDataset
@@ -21,19 +20,7 @@ alpha=1000
 precision_m_values = (1, 5, 10, 20, 50, 100)
 
 
-transform_training = Compose([
-    ToImage(),
-    Resize((224, 224)),
-    RandomHorizontalFlip(p=0.5),
-    RandomVerticalFlip(p=0.5),
-    ToDtype(dtype=torch.float32, scale=True),
-    Normalize(
-        mean=[0.485, 0.456, 0.406],
-        std=[0.229, 0.224, 0.225]
-    )
-])
-
-transform_test = Compose([
+transform = Compose([
     ToImage(),
     Resize((224, 224)),
     ToDtype(dtype=torch.float32, scale=True),
@@ -54,7 +41,7 @@ dataset = KatherDataset(
 dataset_train = KatherPairsDataset(
     dataset,
     train=True,
-    transform=transform_training,
+    transform=transform,
     target_transform=target_transform
 )
 
@@ -62,7 +49,7 @@ dataset_train = KatherPairsDataset(
 dataset_test = KatherPairsDataset(
     dataset,
     train=False,
-    transform=transform_test,
+    transform=transform,
     target_transform=target_transform
 )
 
@@ -73,12 +60,12 @@ dataset_test.resample()
 
 database_dataset = KatherRetrievalDataset(
     sources=dataset_train.sources,
-    transform=transform_test
+    transform=transform
 )
 
 query_dataset = KatherRetrievalDataset(
     sources=dataset_test.sources,
-    transform=transform_test
+    transform=transform
 )
 
 
