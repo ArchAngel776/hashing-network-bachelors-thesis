@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 from torch.optim.adam import Adam
 from torch.accelerator import current_accelerator
-from torchvision.transforms.v2 import Compose, ToImage, Resize, ToDtype,Normalize, Lambda
+from torchvision.transforms.v2 import Compose, ToImage, Resize, InterpolationMode, CenterCrop, ToDtype,Normalize, Lambda
 from app.datasets.KatherDataset import KatherDataset
 from app.datasets.KatherPairsDataset import KatherPairsDataset
 from app.datasets.KatherRetrievalDataset import KatherRetrievalDataset
@@ -23,7 +23,8 @@ precision_m_values  = (1, 5, 10, 20, 50, 100)
 
 transform = Compose([
     ToImage(),
-    Resize((224, 224)),
+    Resize((256, 256), interpolation=InterpolationMode.BICUBIC, antialias=True),
+    CenterCrop((224, 224)),
     ToDtype(dtype=torch.float32, scale=True),
     Normalize(
         mean=[0.485, 0.456, 0.406],
