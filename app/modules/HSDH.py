@@ -14,6 +14,10 @@ class HSDH(Module):
         init.ones_(self._fully_connected_layer.weight)
         init.zeros_(self._fully_connected_layer.bias)
 
+    @no_grad()
+    def fit_scaler(self, dataloader, device):
+        self._hash_generator.fit_scaler(dataloader, device)
+
     def forward(self, image_i, image_j):
         hash_i = self._hash_generator(image_i)
         hash_j = self._hash_generator(image_j)

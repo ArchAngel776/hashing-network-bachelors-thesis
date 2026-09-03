@@ -225,11 +225,6 @@ if __name__ == "__main__":
 
     optimizer = Adam([
         {
-            "name": "batch_normalization",
-            "params": hsdh._hash_generator._batch_normalization.parameters(),
-            "lr": 1e-3
-        },
-        {
             "name": "hash_projection",
             "params": hsdh._hash_generator._hash_projection.parameters(),
             "lr": 1e-4
@@ -243,15 +238,17 @@ if __name__ == "__main__":
 
     model_load_path = input("Give a path for loading model (leave blank, if you do not want to load it): ")
 
-    if len(model_load_path) > 0:
-        if path.exists(model_load_path):
-            params = torch.load(model_load_path, map_location=device)
+    if len(model_load_path) > 0 and path.exists(model_load_path):
+        params = torch.load(model_load_path, map_location=device)
 
-            start_epoch = params["epoch"]
-            hsdh.load_state_dict(params["model"])
-            optimizer.load_state_dict(params["optimizer"])
-        else:
+        start_epoch = params["epoch"]
+        hsdh.load_state_dict(params["model"])
+        optimizer.load_state_dict(params["optimizer"])
+    else:
+        if len(model_load_path) > 0:
             print(f"Model not found under the path: {model_load_path}. Weights will not be loaded.")
+
+        hsdh.fit_scaler(database_loader, device)
 
     print("Start learning process...")
     print("")
