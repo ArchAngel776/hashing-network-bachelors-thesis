@@ -172,8 +172,8 @@ def main_loop(epochs, model, hash_length, loss_function, optimizer, device):
         print(f"Test accuracy: {accuracy_test}")
         print("")
 
-        database_hashes, database_labels = extract_hashes(hsdh, database_loader, device)
-        query_hashes, query_labels = extract_hashes(hsdh, query_loader, device)
+        database_hashes, database_labels    = extract_hashes(model, database_loader, device)
+        query_hashes, query_labels          = extract_hashes(model, query_loader, device)
 
         metrics = get_metrics(
             hash_length     = hash_length,
