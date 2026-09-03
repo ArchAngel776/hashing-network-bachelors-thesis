@@ -30,7 +30,7 @@ Provided parameter `epochs` can be adjusted to the developer's needs.
 
 ### Main training for DINO-HSDH model
 
-A main training can be proceed by running the `main.py` module with proper parameters:
+A main training can be proceeded by running the `main.py` module with proper parameters:
 
 ```shell
 python main.py --hash-length=64 --epochs=100
@@ -40,7 +40,7 @@ Provided parameters `hash-length` and `epochs` can be adjusted to the developer'
 
 > [!IMPORTANT]
 > Loaded checkpoint must pass the provided `hash-length` parameter.
-> For example: if training was previously made for the **hash-length=32** provided argument cannot be different than it.
+> For example: if training was previously made for the **hash-length=32** provided argument cannot be different from it.
 
 ### Reading report analysis after the training
 
