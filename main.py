@@ -88,11 +88,6 @@ hsdh.to(device)
 
 optimizer = Adam([
     {
-        "name": "convolution",
-        "params": hsdh._hash_generator._mobile_net.parameters(),
-        "lr": 1e-4
-    },
-    {
         "name": "batch_normalization",
         "params": hsdh._hash_generator._batch_normalization.parameters(),
         "lr": 1e-3
@@ -100,7 +95,7 @@ optimizer = Adam([
     {
         "name": "hash_projection",
         "params": hsdh._hash_generator._hash_projection.parameters(),
-        "lr": 1e-6
+        "lr": 1e-4
     },
     {
         "name": "fully_connected_layer_3",

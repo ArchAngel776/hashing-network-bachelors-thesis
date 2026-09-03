@@ -1,14 +1,14 @@
 from typing import Self, ClassVar
 from torch import Tensor, no_grad
 from torch.nn import Module, BatchNorm1d, Linear
-from torchvision.models.mobilenetv3 import MobileNetV3
+from app.modules.DINO import DINO
 from app.modules.SignumApprox import SignumApprox
 
 
 class HashGenerator(Module):
     FEATURES_VECTOR_SIZE: ClassVar[int]
 
-    _mobile_net: MobileNetV3
+    _dino: DINO
 
     _batch_normalization: BatchNorm1d
 

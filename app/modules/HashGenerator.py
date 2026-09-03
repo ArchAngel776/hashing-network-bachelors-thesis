@@ -1,24 +1,17 @@
 from torch import no_grad, where, ones_like
 from torch.nn import Module, Linear, BatchNorm1d, init
 from torch.nn.functional import selu
-from torchvision.models import mobilenet_v3_large, MobileNet_V3_Large_Weights
+from app.modules.DINO import DINO
 from app.modules.SignumApprox import SignumApprox
 
 
 class HashGenerator(Module):
-    FEATURES_VECTOR_SIZE = 512
+    FEATURES_VECTOR_SIZE = 384
 
     def __init__(self, hash_length, alpha):
         super().__init__()
 
-        self._mobile_net = mobilenet_v3_large(
-            weights=MobileNet_V3_Large_Weights.IMAGENET1K_V2
-        )
-
-        self._mobile_net.classifier[3] = Linear(
-            in_features=self._mobile_net.classifier[3].in_features,
-            out_features=HashGenerator.FEATURES_VECTOR_SIZE
-        )
+        self._dino = DINO()
 
         self._batch_normalization = BatchNorm1d(num_features=HashGenerator.FEATURES_VECTOR_SIZE)
 
@@ -33,7 +26,7 @@ class HashGenerator(Module):
         self._hash_activation = SignumApprox(alpha)
 
     def forward(self, image):
-        features_vector = self._mobile_net(image)
+        features_vector = self._dino(image)
         normalized_features = self._batch_normalization(features_vector)
 
         hash_project = self._hash_projection(selu(normalized_features))
@@ -42,7 +35,7 @@ class HashGenerator(Module):
 
     @no_grad()
     def generate(self, image):
-        features_vector = self._mobile_net(image)
+        features_vector = self._dino(image)
         normalized_features = self._batch_normalization(features_vector)
 
         hash_project = self._hash_projection(selu(normalized_features))
