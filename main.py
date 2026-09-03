@@ -1,4 +1,5 @@
 from os import path
+from sys import argv
 import torch
 from torch.utils.data import DataLoader
 from torch.optim.adam import Adam
@@ -9,14 +10,12 @@ from app.datasets.KatherPairsDataset import KatherPairsDataset
 from app.datasets.KatherRetrievalDataset import KatherRetrievalDataset
 from app.modules.HSDH import HSDH
 from app.modules.HSDHLoss import HSDHLoss
+from app.components.ArgumentsParser import ArgumentsParser
 from hooks.extract_hashes import extract_hashes
 from hooks.get_metrics import get_metrics
 
 
 batch_size = 64
-epochs = 100
-
-hash_length=128
 
 map_k_values        = (1, 5, 10, 20, 50, 100)
 precision_m_values  = (1, 5, 10, 20, 50, 100)
@@ -195,6 +194,19 @@ def main_loop(epochs, model, hash_length, loss_function, optimizer, device):
 
 
 if __name__ == "__main__":
+    arguments_parser = ArgumentsParser(argv[1:])
+    arguments_parser.parse()
+
+    hash_length = arguments_parser.get_option("hash-length",    int)
+    epochs      = arguments_parser.get_option("epochs",         int)
+
+    try:
+        assert isinstance(hash_length,  int)
+        assert isinstance(epochs,       int)
+    except AssertionError:
+        print("Incorrect arguments specified. You ned to specify: --hash-length=<int> and --epochs=<int>")
+        exit(1)
+
     hsdh = HSDH(hash_length=hash_length)
     loss_function = HSDHLoss(beta=.2)
 
