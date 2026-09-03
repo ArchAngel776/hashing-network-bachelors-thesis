@@ -143,7 +143,7 @@ def test_loop(model, loss_function, device):
 def main_loop(epochs, model, hash_length, loss_function, optimizer, device):
     global start_epoch, current_epoch
 
-    for epoch in range(epochs):
+    for epoch in range(start_epoch, epochs):
         print("")
         print(f"Epoch {epoch + 1}/{epochs}")
         print("------------------------------------")
