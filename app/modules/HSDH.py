@@ -4,10 +4,10 @@ from app.modules.HashGenerator import HashGenerator
 
 
 class HSDH(Module):
-    def __init__(self, hash_length, alpha):
+    def __init__(self, hash_length):
         super().__init__()
 
-        self._hash_generator = HashGenerator(hash_length, alpha)
+        self._hash_generator = HashGenerator(hash_length)
         self._fully_connected_layer = Sequential(
             Linear(in_features=1, out_features=1),
             Sigmoid()

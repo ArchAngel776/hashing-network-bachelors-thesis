@@ -15,7 +15,6 @@ batch_size = 64
 epochs = 100
 
 hash_length=128
-alpha=1000
 
 precision_m_values = (1, 5, 10, 20, 50, 100)
 
@@ -76,7 +75,7 @@ database_loader     = DataLoader(database_dataset,  batch_size=batch_size, shuff
 query_loader        = DataLoader(query_dataset,     batch_size=batch_size, shuffle=False)
 
 
-hsdh = HSDH(hash_length=hash_length, alpha=alpha)
+hsdh = HSDH(hash_length=hash_length)
 loss_function = HSDHLoss(beta=.2)
 
 
