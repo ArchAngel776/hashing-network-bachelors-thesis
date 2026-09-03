@@ -1,6 +1,6 @@
 from torch import no_grad, cat, where, ones_like
 from torch.nn import Module, Linear, init
-from torch.nn.functional import selu, softsign
+from torch.nn.functional import softsign
 from sklearn.preprocessing import StandardScaler as SciKitScaler
 from app.modules.DINO import DINO
 from app.modules.StandardScaler import StandardScaler
@@ -35,7 +35,7 @@ class HashGenerator(Module):
         features_vector = self._dino(image)
         scaled_features = self._standard_scaler(features_vector)
 
-        hash_project = self._hash_projection(selu(scaled_features))
+        hash_project = self._hash_projection(scaled_features)
 
         return softsign(hash_project)
 
@@ -44,6 +44,6 @@ class HashGenerator(Module):
         features_vector = self._dino(image)
         scaled_features = self._standard_scaler(features_vector)
 
-        hash_project = self._hash_projection(selu(scaled_features))
+        hash_project = self._hash_projection(scaled_features)
 
         return where(hash_project >= 0, ones_like(hash_project), -ones_like(hash_project))
