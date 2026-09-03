@@ -1,10 +1,10 @@
 from typing import Optional, Self
-from PIL.Image import Image
+from torch import Tensor
 from torch.utils.data import Dataset
 from torchvision.transforms.v2 import Transform
 
 
-class KatherRetrievalDataset(Dataset[tuple[Image, int]]):
+class KatherRetrievalDataset(Dataset[tuple[Tensor, Tensor]]):
     _sources: list[tuple[str, int]]
 
     _transform: Optional[Transform]
@@ -19,4 +19,4 @@ class KatherRetrievalDataset(Dataset[tuple[Image, int]]):
 
     def __len__(self: Self) -> int: ...
 
-    def __getitem__(self: Self, index: int) -> tuple[Image, int]: ...
+    def __getitem__(self: Self, index: int) -> tuple[Tensor, Tensor]: ...

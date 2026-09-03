@@ -1,11 +1,11 @@
-from PIL.Image import Image
+from typing import Self, Optional
+from torch import Tensor
 from torch.utils.data import Dataset
 from torchvision.transforms.v2 import Transform
-from typing import Self, Optional
 from app.datasets.KatherDataset import KatherDataset
 
 
-class KatherPairsDataset(Dataset[tuple[Image, Image, bool]]):
+class KatherPairsDataset(Dataset[tuple[Tensor, Tensor, Tensor]]):
     RANDOM_SEED: int = ...
     TRAINING_RATE: float = ...
 
@@ -27,7 +27,7 @@ class KatherPairsDataset(Dataset[tuple[Image, Image, bool]]):
 
     def __len__(self: Self) -> int: ...
 
-    def __getitem__(self: Self, index: int) -> tuple[Image, Image, bool]: ...
+    def __getitem__(self: Self, index: int) -> tuple[Tensor, Tensor, Tensor]: ...
 
     def resample(self: Self, epoch: int = 0) -> None: ...
 

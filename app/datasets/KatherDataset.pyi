@@ -1,6 +1,6 @@
+from typing import Self, Optional
 from torch.utils.data import Dataset
 from torchvision.transforms.v2 import Transform
-from typing import Self, Optional
 
 
 class KatherDataset(Dataset[tuple[str, int]]):
