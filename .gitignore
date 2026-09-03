@@ -222,3 +222,6 @@ __marimo__/
 
 # Stored checkpoints
 **/*.pth
+
+# Copyrighted PDFs
+pdfs/**/*.pdf
