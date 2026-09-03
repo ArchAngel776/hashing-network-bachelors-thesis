@@ -1,5 +1,5 @@
 from torch import no_grad
-from torch.nn import Module, Linear
+from torch.nn import Module, Linear, init
 from torch.nn.functional import sigmoid
 from app.modules.HashGenerator import HashGenerator
 
@@ -10,6 +10,9 @@ class HSDH(Module):
 
         self._hash_generator = HashGenerator(hash_length)
         self._fully_connected_layer = Linear(in_features=1, out_features=1)
+
+        init.ones_(self._fully_connected_layer.weight)
+        init.zeros_(self._fully_connected_layer.bias)
 
     def forward(self, image_i, image_j):
         hash_i = self._hash_generator(image_i)
