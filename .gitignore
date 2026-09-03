@@ -219,3 +219,6 @@ __marimo__/
 
 # PyCharm data
 .idea
+
+# Stored checkpoints
+**/*.pth
