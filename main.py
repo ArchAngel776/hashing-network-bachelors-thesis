@@ -18,7 +18,8 @@ epochs = 100
 
 hash_length=128
 
-precision_m_values = (1, 5, 10, 20, 50, 100)
+map_k_values        = (1, 5, 10, 20, 50, 100)
+precision_m_values  = (1, 5, 10, 20, 50, 100)
 
 
 transform = Compose([
@@ -206,11 +207,17 @@ def main_loop():
             database_labels = database_labels,
             query_hashes    = query_hashes,
             query_labels    = query_labels,
+            k_values        = map_k_values,
             m_values        = precision_m_values,
             device          = device
         )
 
         print(f"MAP: {metrics["map"]:.4f}")
+        print("")
+
+        for k, map_at_k in metrics["map_at_k"].items():
+            print(f"MAP@{k}: {map_at_k:.4f}")
+
         print("")
 
         for m, precision in metrics["precision_at_m"].items():

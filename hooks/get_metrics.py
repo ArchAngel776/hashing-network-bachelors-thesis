@@ -8,6 +8,7 @@ def get_metrics(
     database_labels,
     query_hashes,
     query_labels,
+    k_values,
     m_values,
     device
 ):
@@ -47,6 +48,20 @@ def get_metrics(
     average_precision = (cumulative_relevant / ranks * relevant).sum(dim=1) / relevant_count
     mean_average_precision = average_precision.mean().item()
 
+    mean_average_precision_at_k = {}
+
+    for k in k_values:
+        if k <= 0:
+            raise ValueError("The value of k must be positive.")
+
+        effective_k = min(k, database_size)
+
+        relevant_at_k = relevant[:, :effective_k]
+        precision_at_ranks = cumulative_relevant[:, :effective_k] / ranks[:, :effective_k]
+
+        average_precision_at_k = (precision_at_ranks * relevant_at_k).sum(dim=1) / relevant_count.clamp(max=effective_k)
+        mean_average_precision_at_k[k] = average_precision_at_k.mean().item()
+
     precision_at_m = {}
 
     for m in m_values:
@@ -58,5 +73,6 @@ def get_metrics(
 
     return {
         "map":              mean_average_precision,
+        "map_at_k":         mean_average_precision_at_k,
         "precision_at_m":   precision_at_m
     }
