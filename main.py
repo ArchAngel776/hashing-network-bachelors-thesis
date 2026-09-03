@@ -20,6 +20,9 @@ batch_size = 64
 map_k_values        = (1, 5, 10, 20, 50, 100)
 precision_m_values  = (1, 5, 10, 20, 50, 100)
 
+start_epoch     = 0
+current_epoch   = 0
+
 
 transform = Compose([
     ToImage(),
@@ -138,6 +141,8 @@ def test_loop(model, loss_function, device):
 
 
 def main_loop(epochs, model, hash_length, loss_function, optimizer, device):
+    global start_epoch, current_epoch
+
     for epoch in range(epochs):
         print(f"Epoch {epoch + 1}/{epochs}")
         print("------------------------------------")
@@ -191,6 +196,7 @@ def main_loop(epochs, model, hash_length, loss_function, optimizer, device):
         for m, precision in metrics["precision_at_m"].items():
             print(f"Precision@{m}: {precision:.4f}")
 
+        current_epoch = epoch + 1
         print("")
 
 
@@ -240,6 +246,7 @@ if __name__ == "__main__":
         if path.exists(model_load_path):
             params = torch.load(model_load_path, map_location=device)
 
+            start_epoch = params["epoch"]
             hsdh.load_state_dict(params["model"])
             optimizer.load_state_dict(params["optimizer"])
         else:
@@ -247,6 +254,8 @@ if __name__ == "__main__":
 
     print("Start learning process...")
     print("")
+
+    current_epoch = start_epoch
 
     print(f"Used device: {device.type}")
     print("")
@@ -266,7 +275,11 @@ if __name__ == "__main__":
     model_save_path = input("Give a path for saving model (leave blank, if you do not want to save it): ")
 
     if len(model_save_path) > 0:
-        torch.save({"model": hsdh.state_dict(), "optimizer": optimizer.state_dict()}, model_save_path)
+        torch.save({
+            "epoch":        current_epoch,
+            "model":        hsdh.state_dict(),
+            "optimizer":    optimizer.state_dict()
+        }, model_save_path)
 
         print("Model saved successfully!")
 
