@@ -1,12 +1,12 @@
 from typing import Self
 from torch import Tensor, no_grad
-from torch.nn import Module, Sequential
+from torch.nn import Module, Linear
 from app.modules.HashGenerator import HashGenerator
 
 
 class HSDH(Module):
     _hash_generator: HashGenerator
-    _fully_connected_layer: Sequential
+    _fully_connected_layer: Linear
 
     def __init__(self: Self, hash_length: int) -> None: ...
 
