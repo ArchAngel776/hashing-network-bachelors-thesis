@@ -144,6 +144,7 @@ def main_loop(epochs, model, hash_length, loss_function, optimizer, device):
     global start_epoch, current_epoch
 
     for epoch in range(epochs):
+        print("")
         print(f"Epoch {epoch + 1}/{epochs}")
         print("------------------------------------")
 
@@ -270,7 +271,9 @@ if __name__ == "__main__":
             device          = device
         )
     except KeyboardInterrupt:
+        print("")
         print("Training loop interrupted by user.")
+        print("")
 
     model_save_path = input("Give a path for saving model (leave blank, if you do not want to save it): ")
 
