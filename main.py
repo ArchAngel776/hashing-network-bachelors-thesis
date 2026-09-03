@@ -78,60 +78,19 @@ database_loader     = DataLoader(database_dataset,  batch_size=batch_size, shuff
 query_loader        = DataLoader(query_dataset,     batch_size=batch_size, shuffle=False)
 
 
-hsdh = HSDH(hash_length=hash_length)
-loss_function = HSDHLoss(beta=.2)
-
-
-accelerator = current_accelerator(check_available=True)
-device = accelerator if accelerator is not None else torch.device("cpu")
-
-hsdh.to(device)
-
-
-optimizer = Adam([
-    {
-        "name": "batch_normalization",
-        "params": hsdh._hash_generator._batch_normalization.parameters(),
-        "lr": 1e-3
-    },
-    {
-        "name": "hash_projection",
-        "params": hsdh._hash_generator._hash_projection.parameters(),
-        "lr": 1e-4
-    },
-    {
-        "name": "fully_connected_layer_3",
-        "params": hsdh._fully_connected_layer.parameters(),
-        "lr": 1e-3
-    }
-])
-
-
-model_load_path = input("Give a path for loading model (leave blank, if you do not want to load it): ")
-
-if len(model_load_path) > 0:
-    if path.exists(model_load_path):
-        params = torch.load(model_load_path, map_location=device)
-
-        hsdh.load_state_dict(params["model"])
-        optimizer.load_state_dict(params["optimizer"])
-    else:
-        print(f"Model not found under the path: {model_load_path}. Weights will not be loaded.")
-
-
-def train_loop():
+def train_loop(model, loss_function, optimizer, device):
     loss_result = 0.0
     succeeded_predictions = 0
     proceeded_predictions = 0
 
-    hsdh.train()
+    model.train()
 
     for index, (image_i, image_j, target) in enumerate(train_dataloader):
         image_i, image_j, target = image_i.to(device), image_j.to(device), target.to(device).unsqueeze(dim=1)
 
         optimizer.zero_grad(set_to_none=True)
 
-        prediction = hsdh(image_i, image_j)
+        prediction = model(image_i, image_j)
         loss = loss_function(prediction, target)
 
         loss.backward()
@@ -154,17 +113,17 @@ def train_loop():
 
 
 @torch.no_grad()
-def test_loop():
+def test_loop(model, loss_function, device):
     loss_result = 0.0
     succeeded_predictions = 0
     proceeded_predictions = 0
 
-    hsdh.eval()
+    model.eval()
 
     for image_i, image_j, target in test_dataloader:
         image_i, image_j, target = image_i.to(device), image_j.to(device), target.to(device).unsqueeze(dim=1)
 
-        prediction = hsdh(image_i, image_j)
+        prediction = model(image_i, image_j)
         loss = loss_function(prediction, target)
 
         loss_result += loss.item()
@@ -178,7 +137,7 @@ def test_loop():
     return average_loss, accuracy
 
 
-def main_loop():
+def main_loop(epochs, model, hash_length, loss_function, optimizer, device):
     for epoch in range(epochs):
         print(f"Epoch {epoch + 1}/{epochs}")
         print("------------------------------------")
@@ -186,13 +145,22 @@ def main_loop():
         if epoch > 0:
             dataset_train.resample(epoch)
 
-        average_loss_train, accuracy_train = train_loop()
+        average_loss_train, accuracy_train = train_loop(
+            model           = model,
+            loss_function   = loss_function,
+            optimizer       = optimizer,
+            device          = device
+        )
 
         print(f"Train loss: {average_loss_train}")
         print(f"Train accuracy: {accuracy_train}")
         print("")
 
-        average_loss_test, accuracy_test = test_loop()
+        average_loss_test, accuracy_test = test_loop(
+            model           = model,
+            loss_function   = loss_function,
+            device          = device
+        )
 
         print(f"Test loss: {average_loss_test}")
         print(f"Test accuracy: {accuracy_test}")
@@ -227,6 +195,43 @@ def main_loop():
 
 
 if __name__ == "__main__":
+    hsdh = HSDH(hash_length=hash_length)
+    loss_function = HSDHLoss(beta=.2)
+
+    accelerator = current_accelerator(check_available=True)
+    device = accelerator if accelerator is not None else torch.device("cpu")
+
+    hsdh.to(device)
+
+    optimizer = Adam([
+        {
+            "name": "batch_normalization",
+            "params": hsdh._hash_generator._batch_normalization.parameters(),
+            "lr": 1e-3
+        },
+        {
+            "name": "hash_projection",
+            "params": hsdh._hash_generator._hash_projection.parameters(),
+            "lr": 1e-4
+        },
+        {
+            "name": "fully_connected_layer_3",
+            "params": hsdh._fully_connected_layer.parameters(),
+            "lr": 1e-3
+        }
+    ])
+
+    model_load_path = input("Give a path for loading model (leave blank, if you do not want to load it): ")
+
+    if len(model_load_path) > 0:
+        if path.exists(model_load_path):
+            params = torch.load(model_load_path, map_location=device)
+
+            hsdh.load_state_dict(params["model"])
+            optimizer.load_state_dict(params["optimizer"])
+        else:
+            print(f"Model not found under the path: {model_load_path}. Weights will not be loaded.")
+
     print("Start learning process...")
     print("")
 
@@ -234,7 +239,14 @@ if __name__ == "__main__":
     print("")
 
     try:
-        main_loop()
+        main_loop(
+            epochs          = epochs,
+            hash_length     = hash_length,
+            model           = hsdh,
+            loss_function   = loss_function,
+            optimizer       = optimizer,
+            device          = device
+        )
     except KeyboardInterrupt:
         print("Training loop interrupted by user.")
 
