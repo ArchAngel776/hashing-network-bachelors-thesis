@@ -1,10 +1,13 @@
-from typing import Self
+from typing import ClassVar, Self
+from pathlib import Path
 from torch import Tensor
 from torch.nn import Module
 from torchvision.models import VisionTransformer
 
 
 class DINO(Module):
+    CHECKPOINTS_PATH: ClassVar[Path]
+
     _model: VisionTransformer
 
     def __init__(self: Self) -> None: ...

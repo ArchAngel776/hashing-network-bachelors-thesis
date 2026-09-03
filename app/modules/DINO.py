@@ -1,8 +1,11 @@
+from pathlib import Path
 from torch import hub, no_grad
 from torch.nn import Module
 
 
 class DINO(Module):
+    CHECKPOINTS_PATH = Path("data/checkpoints/dino-kather")
+
     def __init__(self):
         super().__init__()
 
