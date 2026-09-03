@@ -1,4 +1,5 @@
 from pathlib import Path
+import torch
 from torch import hub, no_grad
 from torch.nn import Module
 
@@ -18,6 +19,19 @@ class DINO(Module):
 
         self._model.requires_grad_(False)
         self._model.eval()
+
+    def load_domain_pretrained_weights(self):
+        if not DINO.CHECKPOINTS_PATH.joinpath("dino-domain-pretrained.pth").exists():
+            print("No domain pretrained checkpoint exists. DINO will start with generally pretrained weights.")
+            return
+
+        state = torch.load(
+            DINO.CHECKPOINTS_PATH.joinpath("dino-domain-pretrained.pth"),
+            map_location="cpu",
+            weights_only=True
+        )
+
+        self._model.load_state_dict(state)
 
     def train(self, mode = True):
         super().train(False)

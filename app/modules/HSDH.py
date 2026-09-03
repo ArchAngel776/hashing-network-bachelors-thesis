@@ -18,6 +18,9 @@ class HSDH(Module):
     def fit_scaler(self, dataloader, device):
         self._hash_generator.fit_scaler(dataloader, device)
 
+    def load_dino_domain_pretrained_weights(self):
+        self._hash_generator.load_dino_domain_pretrained_weights()
+
     def forward(self, image_i, image_j):
         hash_i = self._hash_generator(image_i)
         hash_j = self._hash_generator(image_j)

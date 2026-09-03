@@ -222,6 +222,7 @@ if __name__ == "__main__":
     device = accelerator if accelerator is not None else torch.device("cpu")
 
     hsdh.to(device)
+    hsdh.load_dino_domain_pretrained_weights()
 
     optimizer = Adam([
         {

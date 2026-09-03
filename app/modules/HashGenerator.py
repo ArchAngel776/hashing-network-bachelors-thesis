@@ -31,6 +31,9 @@ class HashGenerator(Module):
 
         self._standard_scaler.fit_params(scikit_scaler.mean_, scikit_scaler.scale_)
 
+    def load_dino_domain_pretrained_weights(self):
+        self._dino.load_domain_pretrained_weights()
+
     def forward(self, image):
         features_vector = self._dino(image)
         scaled_features = self._standard_scaler(features_vector)
