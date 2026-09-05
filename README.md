@@ -33,14 +33,14 @@ Provided parameter `epochs` can be adjusted to the developer's needs.
 A main training can be proceeded by running the `main.py` module with proper parameters:
 
 ```shell
-python main.py --hash-length=64 --epochs=100
+python main.py --hash-length=64 --epochs=100 --pca=350
 ```
 
-Provided parameters `hash-length` and `epochs` can be adjusted to the developer's needs. Training program is going to ask user, whether starting from previously stored checkpoint is desirable or not (empty input means the training should be fresh).
+Provided parameters `hash-length`, `pca` and `epochs` can be adjusted to the developer's needs. Training program is going to ask user, whether starting from previously stored checkpoint is desirable or not (empty input means the training should be fresh).
 
 > [!IMPORTANT]
-> Loaded checkpoint must pass the provided `hash-length` parameter.
-> For example: if training was previously made for the **hash-length=32** provided argument cannot be different from it.
+> Loaded checkpoint must pass the provided `hash-length` and `pca` parameters.
+> For example: if training was previously made for the **hash-length=32** provided argument cannot be different from it. The same situation is with the **pca** parameter.
 
 ### Reading report analysis after the training
 
@@ -56,9 +56,9 @@ Program can read and display a few analytics data for provided, trained checkpoi
 Report for the checkpoint can be displayed by typing a command:
 
 ```shell
-python report.py --hash-length=64
+python report.py --hash-length=64 --pca=350
 ```
 
-Provided parameter `hash-length` must pass the parameter provided for the measured checkpoint during its training.
+Provided parameters `hash-length` and `pca` must pass the parameters provided for the measured checkpoint during its training.
 
 After launching the script, user is asked to provide a path to the desired checkpoint.
