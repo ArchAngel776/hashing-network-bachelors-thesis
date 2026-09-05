@@ -205,17 +205,19 @@ if __name__ == "__main__":
     arguments_parser = ArgumentsParser(argv[1:])
     arguments_parser.parse()
 
-    hash_length = arguments_parser.get_option("hash-length",    int)
-    epochs      = arguments_parser.get_option("epochs",         int)
+    hash_length     = arguments_parser.get_option("hash-length",    int)
+    epochs          = arguments_parser.get_option("epochs",         int)
+    pca_components  = arguments_parser.get_option("pca",            int)
 
     try:
-        assert isinstance(hash_length,  int)
-        assert isinstance(epochs,       int)
+        assert isinstance(hash_length,      int)
+        assert isinstance(epochs,           int)
+        assert isinstance(pca_components,   int)
     except AssertionError:
-        print("Incorrect arguments specified. You ned to specify: --hash-length=<int> and --epochs=<int>")
+        print("Incorrect arguments specified. You ned to specify: --hash-length=<int> and --epochs=<int> --pca=<int>")
         exit(1)
 
-    hsdh = HSDH(hash_length=hash_length)
+    hsdh = HSDH(hash_length=hash_length, pca_components=pca_components)
     loss_function = HSDHLoss(beta=.2)
 
     accelerator = current_accelerator(check_available=True)
@@ -252,6 +254,9 @@ if __name__ == "__main__":
 
         print("Fitting standard scaler...")
         hsdh.fit_scaler(database_loader, device)
+
+        print("Fitting PCA...")
+        hsdh.fit_pca(database_loader, device)
 
     print("Start learning process...")
     print("")

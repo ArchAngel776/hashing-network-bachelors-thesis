@@ -17,15 +17,17 @@ if __name__ == "__main__":
     arguments_parser = ArgumentsParser(argv[1:])
     arguments_parser.parse()
 
-    hash_length = arguments_parser.get_option("hash-length", int)
+    hash_length     = arguments_parser.get_option("hash-length",    int)
+    pca_components  = arguments_parser.get_option("pca",            int)
 
     try:
-        assert isinstance(hash_length, int)
+        assert isinstance(hash_length,      int)
+        assert isinstance(pca_components,   int)
     except AssertionError:
-        print("Incorrect arguments specified. You ned to specify: --hash-length=<int>")
+        print("Incorrect arguments specified. You ned to specify: --hash-length=<int> --pca=<int>")
         exit(1)
 
-    hsdh = HSDH(hash_length=hash_length)
+    hsdh = HSDH(hash_length=hash_length, pca_components=pca_components)
 
     accelerator = current_accelerator(check_available=True)
     device = accelerator if accelerator is not None else torch.device("cpu")
