@@ -72,17 +72,11 @@ if __name__ == "__main__":
     print("")
 
     unique_hashes, all_hashes = count_unique_hashes(hashes=database_hashes)
-
-    print(f"Unique hashes in the database: {unique_hashes}/{all_hashes}")
-    print("")
-
     collided_codes, collided_images = class_collisions(hashes=database_hashes, labels=database_labels)
-
-    print(f"(Codes/images) collision between classes: ({collided_codes}/{collided_images})")
-    print("")
-
     avg_tie = average_tie(database_hashes=database_hashes, query_hashes=query_hashes, device=device)
 
+    print(f"Unique hashes in the database: {unique_hashes}/{all_hashes}")
+    print(f"(Codes/images) collision between classes: ({collided_codes}/{collided_images})")
     print(f"Average tie: {avg_tie:.4f}")
     print("")
 
