@@ -238,6 +238,7 @@ if __name__ == "__main__":
     ])
 
     model_load_path = input("Give a path for loading model (leave blank, if you do not want to load it): ")
+    print("")
 
     if len(model_load_path) > 0 and path.exists(model_load_path):
         params = torch.load(model_load_path, map_location=device)
@@ -249,6 +250,7 @@ if __name__ == "__main__":
         if len(model_load_path) > 0:
             print(f"Model not found under the path: {model_load_path}. Weights will not be loaded.")
 
+        print("Fitting standard scaler...")
         hsdh.fit_scaler(database_loader, device)
 
     print("Start learning process...")
