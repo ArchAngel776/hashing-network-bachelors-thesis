@@ -54,13 +54,17 @@ def get_metrics(
         if k <= 0:
             raise ValueError("The value of k must be positive.")
 
-        effective_k = min(k, database_size)
+        if k > database_size:
+            raise ValueError("The value of k cannot exceed the database size.")
 
-        relevant_at_k = relevant[:, :effective_k]
-        precision_at_ranks = cumulative_relevant[:, :effective_k] / ranks[:, :effective_k]
+        precision_per_query_at_k = relevant[:, :k].mean(dim=1)
 
-        average_precision_at_k = (precision_at_ranks * relevant_at_k).sum(dim=1) / relevant_count.clamp(max=effective_k)
-        mean_average_precision_at_k[k] = average_precision_at_k.mean().item()
+        precision_per_class_at_k = torch.stack([
+            precision_per_query_at_k[query_labels == label].mean()
+            for label in query_labels.unique()
+        ])
+
+        mean_average_precision_at_k[k] = precision_per_class_at_k.mean().item()
 
     precision_at_m = {}
 
