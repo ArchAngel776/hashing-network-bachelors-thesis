@@ -1,4 +1,4 @@
-from typing import TypeVar, Self, Optional
+from typing import TypeVar, Self, Optional, Callable
 
 TType = TypeVar("TType")
 
@@ -11,4 +11,4 @@ class ArgumentsParser:
 
     def parse(self: Self) -> None: ...
 
-    def get_option(self: Self, name: str, value: type[TType]) -> Optional[TType]: ...
+    def get_option(self: Self, name: str, value: Callable[[str], TType]) -> Optional[TType]: ...
