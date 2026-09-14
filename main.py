@@ -209,6 +209,7 @@ if __name__ == "__main__":
     epochs          = arguments_parser.get_option("epochs",         int)
     pca_components  = arguments_parser.get_option("pca",            int)
     nca_components  = arguments_parser.get_option("nca",            int)
+    decrease_lr     = arguments_parser.get_option("decrease-lr",    str_bool)
 
     try:
         assert isinstance(hash_length,  int)
@@ -256,6 +257,13 @@ if __name__ == "__main__":
         start_epoch = params["epoch"]
         hsdh.load_state_dict(params["model"])
         optimizer.load_state_dict(params["optimizer"])
+
+        if decrease_lr:
+            print("Decreasing learning rate...")
+
+            for group in optimizer.param_groups:
+                group["lr"] *= 1e-1
+
     else:
         if len(model_load_path) > 0:
             print(f"Model not found under the path: {model_load_path}. Weights will not be loaded.")
