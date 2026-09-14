@@ -13,7 +13,7 @@ from app.modules.HSDHLoss import HSDHLoss
 from app.components.ArgumentsParser import ArgumentsParser
 from hooks.extract_hashes import extract_hashes
 from hooks.get_metrics import get_metrics
-
+from hooks.str_bool import str_bool
 
 batch_size = 64
 
@@ -208,16 +208,24 @@ if __name__ == "__main__":
     hash_length     = arguments_parser.get_option("hash-length",    int)
     epochs          = arguments_parser.get_option("epochs",         int)
     pca_components  = arguments_parser.get_option("pca",            int)
+    nca_components  = arguments_parser.get_option("nca",            int)
 
     try:
-        assert isinstance(hash_length,      int)
-        assert isinstance(epochs,           int)
-        assert isinstance(pca_components,   int)
+        assert isinstance(hash_length,  int)
+        assert isinstance(epochs,       int)
+
+        assert not (isinstance(pca_components, int) and isinstance(nca_components, int))
     except AssertionError:
-        print("Incorrect arguments specified. You ned to specify: --hash-length=<int> and --epochs=<int> --pca=<int>")
+        print("Incorrect arguments specified. You ned to specify: --hash-length=<int> and --epochs=<int> [--pca=<int>"
+              "|--nca=<int> --decrease-lr=<bool>]")
         exit(1)
 
-    hsdh = HSDH(hash_length=hash_length, pca_components=pca_components)
+    hsdh = HSDH(
+        hash_length     = hash_length,
+        pca_components  = pca_components,
+        nca_components  = nca_components
+    )
+
     loss_function = HSDHLoss(beta=.2)
 
     accelerator = current_accelerator(check_available=True)
@@ -255,8 +263,13 @@ if __name__ == "__main__":
         print("Fitting standard scaler...")
         hsdh.fit_scaler(database_loader, device)
 
-        print("Fitting PCA...")
-        hsdh.fit_pca(database_loader, device)
+        if pca_components is not None:
+            print("Fitting PCA...")
+            hsdh.fit_pca(database_loader, device)
+
+        if nca_components is not None:
+            print("Fitting NCA...")
+            hsdh.fit_nca(database_loader, device)
 
     print("Start learning process...")
     print("")

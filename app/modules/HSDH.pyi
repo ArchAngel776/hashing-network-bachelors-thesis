@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Self, Optional
 from torch import Tensor, no_grad, device as dev
 from torch.nn import Module, Linear
 from torch.utils.data import DataLoader
@@ -9,13 +9,21 @@ class HSDH(Module):
     _hash_generator: HashGenerator
     _fully_connected_layer: Linear
 
-    def __init__(self: Self, hash_length: int, pca_components: int) -> None: ...
+    def __init__(
+        self: Self,
+        hash_length: int,
+        pca_components: Optional[int] = None,
+        nca_components: Optional[int] = None
+    ) -> None: ...
 
     @no_grad()
     def fit_scaler(self: Self, dataloader: DataLoader[tuple[Tensor, Tensor]], device: dev) -> None: ...
 
     @no_grad()
     def fit_pca(self: Self, dataloader: DataLoader[tuple[Tensor, Tensor]], device: dev) -> None: ...
+
+    @no_grad()
+    def fit_nca(self: Self, dataloader: DataLoader[tuple[Tensor, Tensor]], device: dev) -> None: ...
 
     def load_dino_domain_pretrained_weights(self: Self) -> None: ...
 

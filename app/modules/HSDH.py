@@ -5,10 +5,10 @@ from app.modules.HashGenerator import HashGenerator
 
 
 class HSDH(Module):
-    def __init__(self, hash_length, pca_components):
+    def __init__(self, hash_length, pca_components = None, nca_components = None):
         super().__init__()
 
-        self._hash_generator = HashGenerator(hash_length, pca_components)
+        self._hash_generator = HashGenerator(hash_length, pca_components, nca_components)
         self._fully_connected_layer = Linear(in_features=1, out_features=1)
 
         init.ones_(self._fully_connected_layer.weight)
@@ -21,6 +21,10 @@ class HSDH(Module):
     @no_grad()
     def fit_pca(self, dataloader, device):
         self._hash_generator.fit_pca(dataloader, device)
+
+    @no_grad()
+    def fit_nca(self, dataloader, device):
+        self._hash_generator.fit_nca(dataloader, device)
 
     def load_dino_domain_pretrained_weights(self):
         self._hash_generator.load_dino_domain_pretrained_weights()
