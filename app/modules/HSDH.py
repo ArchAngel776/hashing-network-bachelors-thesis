@@ -39,3 +39,11 @@ class HSDH(Module):
     @no_grad()
     def generate(self, image):
         return self._hash_generator.generate(image)
+
+    @property
+    def hash_generator(self):
+        return self._hash_generator
+
+    @property
+    def fully_connected_layer(self):
+        return self._fully_connected_layer

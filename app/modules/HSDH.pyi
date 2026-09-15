@@ -31,3 +31,9 @@ class HSDH(Module):
 
     @no_grad()
     def generate(self: Self, image: Tensor) -> Tensor: ...
+
+    @property
+    def hash_generator(self: Self) -> HashGenerator: ...
+
+    @property
+    def fully_connected_layer(self: Self) -> Linear: ...

@@ -134,3 +134,7 @@ class HashGenerator(Module):
         hash_project = self.get_hash_project(image)
 
         return where(hash_project >= 0, ones_like(hash_project), -ones_like(hash_project))
+
+    @property
+    def hash_projection(self):
+        return self._hash_projection

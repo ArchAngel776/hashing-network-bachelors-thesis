@@ -15,6 +15,7 @@ from hooks.extract_hashes import extract_hashes
 from hooks.get_metrics import get_metrics
 from hooks.str_bool import str_bool
 
+
 batch_size = 64
 
 map_k_values        = (1, 5, 10, 20, 50, 100)
@@ -238,12 +239,12 @@ if __name__ == "__main__":
     optimizer = Adam([
         {
             "name": "hash_projection",
-            "params": hsdh._hash_generator._hash_projection.parameters(),
+            "params": hsdh.hash_generator.hash_projection.parameters(),
             "lr": 1e-4
         },
         {
             "name": "fully_connected_layer_3",
-            "params": hsdh._fully_connected_layer.parameters(),
+            "params": hsdh.fully_connected_layer.parameters(),
             "lr": 1e-3
         }
     ])

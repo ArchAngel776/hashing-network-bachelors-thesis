@@ -45,3 +45,6 @@ class HashGenerator(Module):
 
     @no_grad()
     def generate(self: Self, image: Tensor) -> Tensor: ...
+
+    @property
+    def hash_projection(self: Self) -> Linear: ...
