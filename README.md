@@ -74,21 +74,25 @@ python statistical-analysis.py --source=<path_to_the_json_source>
 
 The source file should have a structure:
 
-```json
+```jsonc
 {
   "target": [
     0.0,
-    ...
+    0.1,
+    0.2
+    // etc...
   ],
   "sources": [
     {
       "label": "...",
       "values": [
-        <float>,
-        0.0
+        0.3,
+        1.4,
+        2.5
+        // etc...
       ]
     },
-    ...
+    // etc...
   }
 }
 ```
