@@ -77,7 +77,7 @@ The source file should have a structure:
 ```json
 {
   "target": [
-    <float>,
+    0.0,
     ...
   ],
   "sources": [
@@ -85,7 +85,7 @@ The source file should have a structure:
       "label": "...",
       "values": [
         <float>,
-        ...
+        0.0
       ]
     },
     ...
