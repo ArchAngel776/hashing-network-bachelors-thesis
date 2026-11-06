@@ -91,7 +91,7 @@ The source file should have a structure:
         2.5
         // etc...
       ]
-    },
+    }
     // etc...
   }
 }
