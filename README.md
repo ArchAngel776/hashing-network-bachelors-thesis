@@ -93,7 +93,7 @@ The source file should have a structure:
       ]
     }
     // etc...
-  }
+  ]
 }
 ```
 
