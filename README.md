@@ -62,3 +62,36 @@ python report.py --hash-length=64 --pca=350
 Provided parameters `hash-length` and `pca` must pass the parameters provided for the measured checkpoint during its training.
 
 After launching the script, user is asked to provide a path to the desired checkpoint.
+
+
+### Statistical analysis
+
+To make a statistical analysis based on the Wilcoxon tests with the Holm correction type a command:
+
+```shell
+python statistical-analysis.py --source=<path_to_the_json_source>
+```
+
+The source file should have a structure:
+
+```json
+{
+  "target": [
+    <float>,
+    ...
+  ],
+  "sources": [
+    {
+      "label": "...",
+      "values": [
+        <float>,
+        ...
+      ]
+    },
+    ...
+  }
+}
+```
+
+> [!IMPORTANT]
+> The length of "target" array and each "sources".[]."values" arrays must be the same
